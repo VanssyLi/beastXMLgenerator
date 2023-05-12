@@ -4,7 +4,8 @@ Scripts for generating the BEAST XML input files
 
 ## XML generator v1.1
 
-usage:
+usage: 
+
 <code>beast1XMLgenerator [-h] [-o OUTPUT] [-t TEMPLATE] [-f FASTA] [-g GFF] [-p PRIORS] [-m MCMC] [-l LOG] [-i ITERATIVE]</code>
  
 -----------------
