@@ -4,12 +4,15 @@ Scripts for generating the BEAST XML input files
 
 ## XML generator v1.1
 
-usage: 
+usage:
+ 
 beast1XMLgenerator [-h] [-o OUTPUT] [-t TEMPLATE] [-f FASTA] [-g GFF] [-p PRIORS] [-m MCMC] [-l LOG] [-i ITERATIVE]
-
+ 
+  
 Generating XML file for BEAST 1.10.4
 
-optional arguments:
+optional arguments: 
+ 
 -h, --help                                show this help message and exit.
  
 -o OUTPUT, --output OUTPUT                The output XML file.
