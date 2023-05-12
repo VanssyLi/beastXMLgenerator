@@ -13,8 +13,7 @@ Generating XML file for BEAST 1.10.4
 
 optional arguments: 
  
--h, --help 
-show this help message and exit.
+-h, --help [show this help message and exit.]
  
 -o OUTPUT, --output OUTPUT 
 The output XML file.
