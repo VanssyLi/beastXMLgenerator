@@ -25,7 +25,17 @@ optional arguments:
 
 
 ## XML generator v2.0 (ON TEST)
+This script is still on test. 
  
 Available options are:
+- The input fasta (multiple sequence alignment);
+- The annotation file; 
+- The tip priors table;
+- Partitions (what partitions you want to include or exclude)
+- The taxon set;
+- Population model;
+- Subsitution model; 
+- Tree root;
+- MCMC chain length and log length;
 
 
