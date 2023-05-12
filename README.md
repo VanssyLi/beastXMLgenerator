@@ -11,7 +11,7 @@ beast1XMLgenerator [-h] [-o OUTPUT] [-t TEMPLATE] [-f FASTA] [-g GFF] [-p PRIORS
 -----------------
 Generating XML file for BEAST 1.10.4 
 
-<p fontsize=12>
+<code>
 
 optional arguments: 
  
@@ -33,7 +33,7 @@ optional arguments:
  
 -i ITERATIVE, --iterative ITERATIVE [If you want to generate single-dating file for each undated sample. Potential option are True or False.]
 
- </p>
+ </code>
 
 ## XML generator v2.0 (ON TEST)
  
