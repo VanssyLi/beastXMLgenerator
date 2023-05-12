@@ -2,7 +2,7 @@
 
 Scripts for generating the BEAST XML input files
 
-### XML generator v1.1
+## XML generator v1.1
 
 Generating XML file for BEAST 1.10.4 
  
@@ -24,7 +24,7 @@ optional arguments:
 -i ITERATIVE, --iterative ITERATIVE    [If you want to generate single-dating file for each undated sample. Potential option are True or False.]</code> 
 
 
-### XML generator v2.0 (ON TEST)
+## XML generator v2.0 (ON TEST)
  
 Available options are:
 
