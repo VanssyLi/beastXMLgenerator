@@ -8,9 +8,11 @@ usage:
  
 beast1XMLgenerator [-h] [-o OUTPUT] [-t TEMPLATE] [-f FASTA] [-g GFF] [-p PRIORS] [-m MCMC] [-l LOG] [-i ITERATIVE]
  
-====================================================
-Generating XML file for BEAST 1.10.4
-====================================================
+-------------------------------------
+
+Generating XML file for BEAST 1.10.4 
+-------------------------------------
+
 
 optional arguments: 
  
