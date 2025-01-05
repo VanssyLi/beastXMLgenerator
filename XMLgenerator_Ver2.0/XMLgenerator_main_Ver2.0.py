@@ -8,23 +8,24 @@ import module7_likelihood as mLikeli
 import module8_operators as mOperator
 import module9_priors as mPriors
 import module10_logs as mLog
-import functions as f
+import functions_v2 as f
 import math
 import xml.etree.ElementTree as ET
 
-fasta = '/Users/vanssyli/Master/SU/CPG/Scripts/beast1XMLgenerater/data/DVPetal-mitogenomes_NDexcluded_date1.2.3.4.5.fasta'
-priors_table = '/Users/vanssyli/Master/SU/CPG/Scripts/beast1XMLgenerater/data/Priors_DPVetal-mitogenomes_5oldest_5youngest.csv'
-gff = '/Users/vanssyli/Master/SU/CPG/Scripts/beast1XMLgenerater/data/NC_007596.2.liftoff.gff3'
-partition_file = '/Users/vanssyli/Master/SU/CPG/Scripts/beast1XMLgenerater/data/partitions.xlsx'
-log_name = 'DVPetal-mitogenomes_NDexcluded_date12345-etree_test'
 
-taxon_set = [['L.', 'P.'],
-             ['M.'],
-             ['M.', 'E.'],
-             ['ND', 'P.']]
-ND_list = ['ND', 'P.']
+fasta = '/Users/vanssyli/Master/SU/CPG/BEASTdata/Mexican_Mammoths/mammoths_mexican_and_10.align_mafft_23463.fasta'
+priors_table = '/Users/vanssyli/Master/SU/CPG/Scripts/beast1XMLgenerater/data/Priors_Maxican_Mammoth_10_23463_logNormal.csv'
+gff = '/Users/vanssyli/Master/SU/CPG/Scripts/Liftoff/mammoth_maxican_10.liftoff.gff3'
+partition_file = '/Users/vanssyli/Master/SU/CPG/Scripts/beast1XMLgenerater/data/partitions.xlsx'
+log_name = 'mammoths_mexican_10_23463_logNormal_10million_NoPartition'
+
+taxon_set = [['MX'],
+             ['ND']]
+ND_list = ['ND']
 
 partition_list = ['tRNA', 'rRNA', 'CDS', 'D_loop']
+split_partition = True
+
 
 beast_setting = f.Xml(units='years',
                       population_model='skygrid',
@@ -35,10 +36,9 @@ beast_setting = f.Xml(units='years',
 
 skygrid_cutoff = (int(list(str(beast_setting.root_height_mean))[0]) + 1) * \
                  (math.pow(10, len(str(round(beast_setting.root_height_mean)))))
+
 chainLength = 10000000
 log_every = 1000
-
-
 
 
 
@@ -50,8 +50,8 @@ mTaxa.intro_taxa(beast, fasta, priors_table)
 mTaxa.intro_taxonSet(beast, taxon_set, fasta)
 
 # Module 2 -- Introduce aligned sequences with/without partitions
-mSeq.build_partitionSeq(beast, partition_file, fasta, gff)
-mSeq.build_patterns(beast, partition_file)
+mSeq.build_partitionSeq(beast, partition_file, fasta, gff, split_partition)
+mSeq.build_patterns(beast, partition_file, split_partition)
 
 # Module 3 -- Introduce the tree model
 mTreeModel.build_initialTree(beast, units=beast_setting.units)
@@ -64,16 +64,16 @@ mTreeModel.calc_taxonSet_branchLen(beast, taxon_set)
 mPop.skygrid(beast, mean=beast_setting.root_height_mean)
 
 # Module 5 -- Define the clock model
-mClock.strict_clock(beast, partition_file)
+mClock.strict_clock(beast, partition_file, split_partition)
 
 # Module 6 -- Define the substitution model
-mSubs.HKY(beast, partition_file)
+mSubs.HKY(beast, partition_file, split_partition)
 
 # Module 7 -- Likelihoods
-mLikeli.calc_likelihood(beast, partition_file)
+mLikeli.calc_likelihood(beast, partition_file, split_partition)
 
 # Module 8 -- Operators
-mOperator.build_operator(beast, partition_file, fasta)
+mOperator.build_operator(beast, partition_file, fasta, split_partition)
 
 # Define MCMC
 MCMC = ET.SubElement(beast, 'mcmc', attrib={'id': 'mcmc', 'chainLength': str(chainLength), 'autoOptimize': 'true'})
@@ -82,22 +82,22 @@ jointPrior = ET.SubElement(joint, 'prior', attrib={'id': 'prior'})
 f.make_comment(beast, ' Define MCMC ')
 
 # Module 9 -- Priors
-mPriors.define_operators(jointPrior, joint, MCMC, fasta, priors_table, partition_file,
+mPriors.define_operators(jointPrior, joint, MCMC, fasta, priors_table, partition_file, split_partition,
                          rootHeight_mean=beast_setting.root_height_mean,
                          rootHeight_stdev=beast_setting.root_height_stdev,
                          rootHeight_offset=beast_setting.root_height_offset)
 
 # Module 10 -- Write Logs
-mLog.to_screen(MCMC, partition_file, log_every)
-mLog.to_file(MCMC, log_every, log_name, taxon_set, partition_file, fasta)
-mLog.trees_to_file(MCMC, log_every, log_name, partition_file)
+mLog.to_screen(MCMC, partition_file, log_every, split_partition)
+mLog.to_file(MCMC, log_every, log_name, taxon_set, partition_file, fasta, split_partition)
+mLog.trees_to_file(MCMC, log_every, log_name, partition_file, split_partition)
 mLog.report(beast)
 
 # Test and store the XML file
 f.pretty_xml(beast)
 # ET.dump(beast)
 
-tree.write('{}.xml'.format(log_name), encoding='utf=8', xml_declaration=True)
+tree.write('{}.xml'.format(log_name), encoding='utf-8', xml_declaration=True)
 
 
 
