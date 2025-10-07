@@ -109,16 +109,21 @@ def treeModel(jointPrior, rootHeight_mean, rootHeight_stdev, rootHeight_offset):
 def tip(jointPrior, fasta, priors_table):
     # Tip samples priors
     for sample in f.get_ND_taxa(fasta):
-        if f.get_tip_priors(priors_table)[sample][0] == 'logNormal':
+        if f.get_tip_priors(priors_table, fasta)[sample][0] == 'logNormal':
             tipPriors = ET.SubElement(jointPrior, 'logNormalPrior',
-                                      attrib={'mu': str(f.get_tip_priors(priors_table)[sample][1]),
-                                              'sigma': str(f.get_tip_priors(priors_table)[sample][2]),
-                                              'offset': str(f.get_tip_priors(priors_table)[sample][3])})
-        if f.get_tip_priors(priors_table)[sample][0] == 'uniform':
+                                      attrib={'mu': str(f.get_tip_priors(priors_table, fasta)[sample][1]),
+                                              'sigma': str(f.get_tip_priors(priors_table, fasta)[sample][2]),
+                                              'offset': str(f.get_tip_priors(priors_table, fasta)[sample][3])})
+        if f.get_tip_priors(priors_table, fasta)[sample][0] == 'uniform':
             tipPriors = ET.SubElement(jointPrior, 'uniformPrior',
-                                      attrib={'lower': str(f.get_tip_priors(priors_table)[sample][1]),
-                                              'upper': str(f.get_tip_priors(priors_table)[sample][2]),
-                                              'offset': str(f.get_tip_priors(priors_table)[sample][3])})
+                                      attrib={'lower': str(f.get_tip_priors(priors_table, fasta)[sample][1]),
+                                              'upper': str(f.get_tip_priors(priors_table, fasta)[sample][2]),
+                                              'offset': str(f.get_tip_priors(priors_table, fasta)[sample][3])})
+        if f.get_tip_priors(priors_table, fasta)[sample][0] == 'normal':
+            tipPriors = ET.SubElement(jointPrior, 'normalPrior',
+                                      attrib={'mean': str(f.get_tip_priors(priors_table, fasta)[sample][1]),
+                                              'stdev': str(f.get_tip_priors(priors_table, fasta)[sample][2]),
+                                              'offset': str(f.get_tip_priors(priors_table, fasta)[sample][3])})
         ET.SubElement(tipPriors, 'parameter', attrib={'idref': 'age({})'.format(sample)})
 
 

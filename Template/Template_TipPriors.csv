@@ -1,0 +1,3 @@
+taxa,date,prior,mu/lower,sigma/upper,offset
+ID3,50000,uniform,100,1000000,0
+ID4,50000,uniform,100,1000000,0

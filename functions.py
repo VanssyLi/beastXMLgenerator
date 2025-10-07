@@ -66,7 +66,7 @@ def get_taxa_date(fasta, priors_table):
             if line.startswith('>'):
                 taxa_name = str(line).strip('>').strip('\n')
                 if taxa_name.split('_')[-1] == 'ND':  # If ND, use the date from priors_table
-                    taxa_date_list.append(tip_date_table(priors_table)[taxa_name])
+                    taxa_date_list.append(tip_date_table(priors_table, fasta)[taxa_name])
                 else:
                     taxa_date_list.append(taxa_name.split('_')[-1])  # Extract date from the name
     return taxa_date_list
@@ -94,13 +94,24 @@ def get_taxa_sequence(fasta):
     return fa_dict
 
 
-def get_tip_priors(priors_table):
+def get_tip_priors(priors_table, fasta):
     """
     Reads a priors table and returns a dictionary of tip priors for each taxa.
     """
     with open(priors_table, 'r') as priors_file:
         priors_df = pd.read_csv(priors_file, header=0)
-        tip_taxa = priors_df['taxa'].values.tolist()
+        short_taxa = priors_df['taxa'].values.tolist()
+        fasta_taxa = get_taxa_name(fasta)
+        
+        tip_taxa = []
+        matched_indices = []
+        
+        for i, taxa in enumerate(short_taxa):
+            matching_fasta_names = [name for name in fasta_taxa if name.startswith(taxa)]
+            if matching_fasta_names:
+                tip_taxa.append(matching_fasta_names[0])
+                matched_indices.append(i)
+    
         tip_prior = priors_df['prior'].values.tolist()
         tip_mu_lower = priors_df['mu/lower'].values.tolist()
         tip_sigma_upper = priors_df['sigma/upper'].values.tolist()
@@ -114,13 +125,24 @@ def get_tip_priors(priors_table):
     return dict(zip(tip_taxa, tip_priors_list))
 
 
-def tip_date_table(priors_table):
+def tip_date_table(priors_table, fasta):
     """
     Reads a priors table and returns a dictionary of taxa names to their dates.
     """
     with open(priors_table, 'r') as priors_file:
         priors_df = pd.read_csv(priors_file, header=0)
-        tip_taxa = priors_df['taxa'].values.tolist()
+        short_taxa = priors_df['taxa'].values.tolist()
+        fasta_taxa = get_taxa_name(fasta)
+        
+        tip_taxa = []
+        matched_indices = []
+        
+        for i, taxa in enumerate(short_taxa):
+            matching_fasta_names = [name for name in fasta_taxa if name.startswith(taxa)]
+            if matching_fasta_names:
+                tip_taxa.append(matching_fasta_names[0])
+                matched_indices.append(i)
+        
         tip_date = priors_df['date'].values.tolist()
 
     return dict(zip(tip_taxa, tip_date))
